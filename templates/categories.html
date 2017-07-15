@@ -1,0 +1,30 @@
+<html>
+
+<head>
+
+
+<body>
+<div class = 'pane'>
+<h1>Categories</h1>
+
+<a href="#" > <h3> Create a New Category </h3> </a>
+
+{% for category in categories %}
+
+
+
+<a href = "#"> <p>{{category.name}}</p></a>
+
+<p><a href = "#">Edit Category</a></p>
+
+<p> <a href = "#">Delete Category</a> </p>
+
+
+
+
+{% endfor %}
+
+</div>
+</body>
+
+</html>
