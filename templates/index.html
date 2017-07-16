@@ -10,7 +10,16 @@
 <body>
 	{% include "header.html" %}
 	<div class="container">
-		{% include "category_list.html" %}
+		<div class="row">
+			{% include "category_list.html" %}
+		
+			{% if test %}
+				{% include "item_list.html" %}
+			{% endif %}
+			{% if test2 %}
+				{% include "item_list2.html" %}
+			{% endif %}
+		</div>
 	</div>
 </body>
 </html>
