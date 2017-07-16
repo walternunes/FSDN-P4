@@ -24,3 +24,8 @@ category1 = Category(name="Snowboarding")
 
 session.add(category1)
 session.commit()
+
+category2 = Category(name="Hockey")
+
+session.add(category2)
+session.commit()
