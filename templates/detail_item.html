@@ -11,11 +11,24 @@
 	{% include "header.html" %}
 	<div class="container">
 		<div class="row">
-			{% include "category_list.html" %}
-		
-			{% if test %}
-				{% include "item_list.html" %}
-			{% endif %}
+			<div class="row">
+			  <div class="col-xs-12">
+				<a class="btn btn-success">New Category</a>
+			  </div>
+			</div>
+			<div class="row">
+			  <div class="col-xs-12">
+				<ul class="list-group">
+				 
+					  <div class="pull-left">
+						<h4 class="list-group-item-heading">{{catalogItem.name}}</h4>
+					  </div>
+					  <span class="pull-right">
+					  </span>
+					
+				</ul>
+			  </div>
+			</div>
 		</div>
 	</div>
 </body>

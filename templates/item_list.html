@@ -6,23 +6,19 @@
 	</div>
 	<div class="row">
 		<div class="col-xs-12">
-			<h1>aaaaaaaa</h1>
-		</div>
-		<div class="col-xs-12">
-			<button class="btn btn-primary">Edit</button>
-			<button class="btn btn-danger" >Delete</button>
+			<h1>{{categoryName}}</h1>
 		</div>
 	</div>
 	<hr>
 	<div class="row">
 		<div class="col-xs-12">
-			<p>bbbbbb</p>
-		</div>
-	</div>
-	<div class="row">
-		<div class="col-xs-12">
-			<ul class="list-group">
-			</ul>
+				{% for item in categoryItems %}
+					<a href="{{url_for('detailItem', catalog_id = categoryId, item_id = item.id )}}" class="list-group-item clearfix ">
+						<div class="pull-left">
+							<h4 class="list-group-item-heading">{{item.name}}</h4>
+						</div>
+					</a>
+				{% endfor %}
 		</div>
 	</div>
 </div>

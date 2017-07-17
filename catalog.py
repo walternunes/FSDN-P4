@@ -28,23 +28,18 @@ def detailCategory(catalog_id):
 
 	category = session.query(Category).filter_by(id = catalog_id).first()
 	categoryName = category.name
+	categoryId = category.id
 	categoryItems = session.query(CatalogItem).filter_by(category_id = catalog_id).all()
 	test = 1;
-	return render_template('index.html', categories = categories, categoryItems = categoryItems, categoryName = categoryName, test = test)
+	return render_template('index.html', categories = categories, categoryItems = categoryItems, categoryName = categoryName, categoryId = categoryId, test = test)
 
-@app.route('/catalog2/<int:catalog_id>')
-@app.route('/catalog2/<int:catalog_id>/items')
-def detailCategory2(catalog_id):
-	# Get all categories
-	categories = session.query(Category).all()
+	
+@app.route('/catalog/<int:catalog_id>/item/<int:item_id>')
+def detailItem(catalog_id, item_id):
+	catalogItem = session.query(CatalogItem).filter_by(id = item_id).first()
 
-
-	category = session.query(Category).filter_by(id = catalog_id).first()
-	categoryName = category.name
-	categoryItems = session.query(CatalogItem).filter_by(category_id = catalog_id).all()
-	test2 = 1;
-	return render_template('index.html', categories = categories, categoryItems = categoryItems, categoryName = categoryName, test2 = test2)
-
+	return render_template('detail_item.html', catalogItem = catalogItem)
+	
 
 if __name__ == '__main__':
     app.debug = True

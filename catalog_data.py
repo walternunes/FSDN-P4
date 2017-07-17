@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database_setup import Category, Base
+from database_setup import Category, Base, CatalogItem
 
 engine = create_engine('sqlite:///itemcatalog.db')
 # Bind the engine to the metadata of the Base class so that the
@@ -25,7 +25,29 @@ category1 = Category(name="Snowboarding")
 session.add(category1)
 session.commit()
 
+catalogItem1 = CatalogItem(name="Snowboard", description="Snowboard description",
+                     price="$45.00", category=category1)
+
+session.add(catalogItem1)
+session.commit()
+
+
+catalogItem2 = CatalogItem(name="Goggles", description="A pair of goggles",
+                     price="$32.99", category=category1)
+
+session.add(catalogItem2)
+session.commit()
+
+
+
 category2 = Category(name="Hockey")
 
 session.add(category2)
+session.commit()
+
+
+catalogItem3 = CatalogItem(name="Stick", description="Quality stick",
+                     price="$55.50", category=category2)
+
+session.add(catalogItem3)
 session.commit()
