@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Item Catalog</title>
+	<base href="/">
+
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+	{% include "header.html" %}
+	<div class="container">
+		<div class="row">				
+			<div class="row">
+				<div class="col-xs-12">
+					<form method = "post">
+					<div class="row">
+						<div class="col-xs-12">
+							<button type="submit" class="btn btn-success" id="submit" type="submit">Create</button>
+							<a href="{{url_for('showCategory')}}" class="btn btn-danger">Cancel</a>
+						</div>
+					</div>
+					<hr>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="name">Title</label>
+								<input
+									type="text"
+									id="name"
+									name="name"
+									class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="image_url">Image Url</label>
+								<input
+									type="text"
+									id="image_url"
+									name="image_url"
+									class="form-control">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="content">Description </label>
+								<textarea
+									type="text"
+									id="description"
+									name="description"
+									rows="6"
+									class="form-control"></textarea>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<label for="content">Description </label>
+								<select class="form-control" name="category">
+									{% for option in categories %}
+										<option id="{{option.id}}" value="{{option.id}}">{{option.name}}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>		
+		</div>
+	</div>
+</body>
+</html>

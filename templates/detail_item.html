@@ -12,22 +12,31 @@
 	<div class="container">
 		<div class="row">
 			<div class="row">
-			  <div class="col-xs-12">
-				<a class="btn btn-success">New Category</a>
-			  </div>
+				<div class="col-xs-12">
+					<a href="{{url_for('editItem', catalog_id = catalog_id, item_id = catalogItem.id)}}">
+						<button class="btn btn-primary">Edit</button>
+					</a>
+					<button class="btn btn-danger" >Delete</button>
+				</div>
 			</div>
+			<hr>
 			<div class="row">
-			  <div class="col-xs-12">
-				<ul class="list-group">
-				 
-					  <div class="pull-left">
-						<h4 class="list-group-item-heading">{{catalogItem.name}}</h4>
-					  </div>
-					  <span class="pull-right">
-					  </span>
-					
-				</ul>
-			  </div>
+				<div class="col-xs-12">
+					<ul class="list-group">
+						<div class="list-group-item clearfix" >
+						
+							<span class="pull-left">
+								<img class="img-responsive"
+									src="{{catalogItem.image_url}}"
+									style="max-height: 250px; max-width: 250px; margin: 5px 15px 5px 5px;"/>
+							</span>
+							<div style="margin-left: 20px;" >
+								<h2 class="list-group-item-heading">{{catalogItem.name}}</h2>
+								<p class="list-group-item-text">{{catalogItem.description}}</p>
+							</div>
+						</div>
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>

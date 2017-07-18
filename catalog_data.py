@@ -26,14 +26,14 @@ session.add(category1)
 session.commit()
 
 catalogItem1 = CatalogItem(name="Snowboard", description="Snowboard description",
-                     price="$45.00", category=category1)
+                     image_url="", category=category1)
 
 session.add(catalogItem1)
 session.commit()
 
 
 catalogItem2 = CatalogItem(name="Goggles", description="A pair of goggles",
-                     price="$32.99", category=category1)
+                     image_url="", category=category1)
 
 session.add(catalogItem2)
 session.commit()
@@ -47,7 +47,7 @@ session.commit()
 
 
 catalogItem3 = CatalogItem(name="Stick", description="Quality stick",
-                     price="$55.50", category=category2)
+                     image_url="", category=category2)
 
 session.add(catalogItem3)
 session.commit()

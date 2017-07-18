@@ -38,7 +38,45 @@ def detailCategory(catalog_id):
 def detailItem(catalog_id, item_id):
 	catalogItem = session.query(CatalogItem).filter_by(id = item_id).first()
 
-	return render_template('detail_item.html', catalogItem = catalogItem)
+	return render_template('detail_item.html', catalog_id=catalog_id, catalogItem = catalogItem)
+
+@app.route(
+    '/catalog/<int:catalog_id>/item/<int:item_id>/edit',
+    methods=['GET', 'POST'])
+def editItem(catalog_id, item_id):
+    editedItem = session.query(CatalogItem).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        if request.form['name']:
+            editedItem.name = request.form['name']
+        if request.form['description']:
+            editedItem.description = request.form['description']
+        if request.form['image_url']:
+            editedItem.image_url = request.form['image_url']
+        session.add(editedItem)
+        session.commit()
+        return redirect(url_for('detailItem', catalog_id=catalog_id, item_id=item_id))
+    else:
+        return render_template(
+            'edit_item.html', catalog_id=catalog_id, item_id=item_id, item=editedItem)
+
+@app.route(
+    '/catalog/item/create',
+    methods=['GET', 'POST'])
+def createItem():
+	# Get all categories
+	categories = session.query(Category).all()
+	if request.method == 'POST':
+		newItem = CatalogItem(
+		name=request.form['name'],
+			description=request.form['description'],
+			image_url=request.form['image_url'],
+			category_id=request.form['category'])
+		session.add(newItem)
+		session.commit()
+
+		return redirect(url_for('showCategory'))
+	else:
+		return render_template('create_item.html', categories=categories)
 	
 
 if __name__ == '__main__':
