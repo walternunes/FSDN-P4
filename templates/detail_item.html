@@ -16,7 +16,9 @@
 					<a href="{{url_for('editItem', catalog_id = catalog_id, item_id = catalogItem.id)}}">
 						<button class="btn btn-primary">Edit</button>
 					</a>
-					<button class="btn btn-danger" >Delete</button>
+					<a href="{{url_for('deleteItem', catalog_id = catalog_id, item_id = catalogItem.id)}}">
+						<button class="btn btn-danger" >Delete</button>
+					</a>
 				</div>
 			</div>
 			<hr>
@@ -32,7 +34,7 @@
 							</span>
 							<div style="margin-left: 20px;" >
 								<h2 class="list-group-item-heading">{{catalogItem.name}}</h2>
-								<p class="list-group-item-text">{{catalogItem.description}}</p>
+								<p class="list-group-item-text" style="display: inline-block; overflow: hidden; white-space: pre-wrap;">{{catalogItem.description}}</p>
 							</div>
 						</div>
 					</ul>

@@ -77,6 +77,19 @@ def createItem():
 		return redirect(url_for('showCategory'))
 	else:
 		return render_template('create_item.html', categories=categories)
+
+
+@app.route('/catalog/<int:catalog_id>/item/<int:item_id>/delete',
+           methods=['GET', 'POST'])
+def deleteItem(catalog_id, item_id):
+    itemToDelete = session.query(CatalogItem).filter_by(id=item_id).one()
+    if request.method == 'POST':
+        session.delete(itemToDelete)
+        session.commit()
+        return redirect(url_for('showCategory'))
+    else:
+        return render_template('delete_item.html', item=itemToDelete)
+    # return "This page is for deleting menu item %s" % menu_id
 	
 
 if __name__ == '__main__':
