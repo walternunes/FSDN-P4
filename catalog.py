@@ -57,6 +57,8 @@ def detailItem(catalog_id, item_id):
     '/catalog/<int:catalog_id>/item/<int:item_id>/edit',
     methods=['GET', 'POST'])
 def editItem(catalog_id, item_id):
+    if validate_login():
+        return redirect(url_for('showLogin'))	
     editedItem = session.query(CatalogItem).filter_by(id=item_id).one()
     if request.method == 'POST':
         if request.form['name']:
@@ -76,6 +78,8 @@ def editItem(catalog_id, item_id):
     '/catalog/item/create',
     methods=['GET', 'POST'])
 def createItem():
+	if validate_login():
+		return redirect(url_for('showLogin'))	
 	# Get all categories
 	categories = session.query(Category).all()
 	if request.method == 'POST':
@@ -95,13 +99,15 @@ def createItem():
 @app.route('/catalog/<int:catalog_id>/item/<int:item_id>/delete',
            methods=['GET', 'POST'])
 def deleteItem(catalog_id, item_id):
-    itemToDelete = session.query(CatalogItem).filter_by(id=item_id).one()
-    if request.method == 'POST':
-        session.delete(itemToDelete)
-        session.commit()
-        return redirect(url_for('showCategory'))
-    else:
-        return render_template('delete_item.html', item=itemToDelete)
+	if validate_login():
+		return redirect(url_for('showLogin'))	
+	itemToDelete = session.query(CatalogItem).filter_by(id=item_id).one()
+	if request.method == 'POST':
+		session.delete(itemToDelete)
+		session.commit()
+		return redirect(url_for('showCategory'))
+	else:
+		return render_template('delete_item.html', item=itemToDelete)
     # return "This page is for deleting menu item %s" % menu_id
 	
 # Create anti-forgery state token
@@ -234,6 +240,14 @@ def disconnect():
 	if login_session.get('api_server') == 'google':
 		return gdisconnect()
 	return "error"
+	
+def validate_login():
+	print 'test'
+	print login_session
+	if 'username' not in login_session:
+		print 'test2'
+		return True
+	else: return False
 	
 if __name__ == '__main__':
 	app.secret_key = 'super_secret_key'
