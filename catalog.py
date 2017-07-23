@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, jsonify, url_for, make_response, flash
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, Category, CatalogItem
+from database_setup import Base, Category, CatalogItem, User
 from flask import session as login_session
 import random
 import string
@@ -50,8 +50,8 @@ def detailCategory(catalog_id):
 @app.route('/catalog/<int:catalog_id>/item/<int:item_id>')
 def detailItem(catalog_id, item_id):
 	catalogItem = session.query(CatalogItem).filter_by(id = item_id).first()
-
-	return render_template('detail_item.html', catalog_id=catalog_id, catalogItem = catalogItem)
+	creator = getUserInfo(catalogItem.user_id)
+	return render_template('detail_item.html', catalog_id=catalog_id, catalogItem = catalogItem, creator=creator)
 
 @app.route(
     '/catalog/<int:catalog_id>/item/<int:item_id>/edit',
@@ -193,6 +193,11 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    user_id = getUserID(login_session['email'])
+    if not user_id:
+        user_id = createUser(login_session)
+    login_session['user_id'] = user_id
+
     output = ''
     output += '<h1>Welcome, '
     output += login_session['username']
@@ -204,6 +209,27 @@ def gconnect():
     print "done!"
     return output
 	
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
+	
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('credentials')
@@ -212,7 +238,7 @@ def gdisconnect():
     	response = make_response(json.dumps('Current user not connected.'), 401)
     	response.headers['Content-Type'] = 'application/json'
     	return response
-    
+    print '----->' + access_token
     url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['credentials']
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
@@ -229,7 +255,8 @@ def gdisconnect():
     	response.headers['Content-Type'] = 'application/json'
     	return response
     else:
-	
+		# Error occured, clear session. Otherwise login will be stuck forever
+        login_session.clear()
     	response = make_response(json.dumps('Failed to revoke token for given user.', 400))
     	response.headers['Content-Type'] = 'application/json'
     	return response
