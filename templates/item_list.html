@@ -13,7 +13,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 				{% for item in categoryItems %}
-					<a href="{{url_for('detailItem', catalog_id = categoryId, item_id = item.id )}}" class="list-group-item clearfix ">
+					<a href="{{url_for('detailItem', catalog_id = item.category_id, item_id = item.id )}}" class="list-group-item clearfix ">
 						<div class="pull-left">
 							<h4 class="list-group-item-heading">{{item.name}}</h4>
 						</div>

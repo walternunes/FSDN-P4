@@ -14,7 +14,7 @@
 		{% endif %}
 		<ul class="nav navbar-nav navbar-right">
 			{% if 'username' in session %}
-				<li><a href="{{url_for('disconnect')}}">Logout</a></li>
+				<li><a href="{{url_for('disconnect')}}">{{session.username}} - Logout</a></li>
 			{% else %}
 				<li><a href="{{url_for('showLogin')}}">Login</a></li>
 			{% endif%}

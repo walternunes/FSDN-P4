@@ -15,8 +15,8 @@
 			<h2 style="text-align: center;"class="form-signin-heading">Please sign in using</h2>
 
 <hr>
-<div style="width: 100%;  text-align: center;">
-	<div id="signInButton" style="display: inline-block">
+<div id="signInButton" style="width: 100%;  text-align: center;">
+	<div  >
 		<span data-scope="openid email"
             data-clientid="335616115800-mim4qj5dad05nbau20im64pelssq0cdp.apps.googleusercontent.com"
             data-redirecturi="postmessage"
@@ -24,13 +24,15 @@
             data-cookiepolicy="single_host_origin"
             data-callback="signInCallback"
             data-approvalprompt="force"
-			style="background:#e74c3d;" 
-			class="btn btn-lg btn-primary btn-block g-signin" type="submit">Google +</span>
+			class="g-signin"></span>
+			 
 	</div>
-	<div style="display: inline-block"><button style="background:#3b5998;" class="btn btn-lg btn-primary btn-block" type="submit">Facebook</button></div>
+	<div >
+			<fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+				<a href='javascript:sendTokenToServer()'>Facebook</a>
+			</fb:login-button>
+	</div>
 </div>
-
-
 
 <div id="result"></div>
 
@@ -62,6 +64,60 @@ function signInCallback(authResult) {
       
   }); } }
 </script>
+
+<!--FACEBOOK SIGN IN -->
+<script>
+  window.fbAsyncInit = function() {
+  FB.init({
+    appId      : '253371111847064',
+    cookie     : true,  // enable cookies to allow the server to access 
+                        // the session
+    xfbml      : true,  // parse social plugins on this page
+    version    : 'v2.2' // use version 2.2
+  });
+  };
+  // Load the SDK asynchronously
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/sdk.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function sendTokenToServer() {
+    var access_token = FB.getAuthResponse()['accessToken'];
+    console.log(access_token)
+    console.log('Welcome!  Fetching your information.... ');
+    FB.api('/me', function(response) {
+      console.log('Successful login for: ' + response.name);
+     $.ajax({
+      type: 'POST',
+      url: '/fbconnect?state={{STATE}}',
+      processData: false,
+      data: access_token,
+      contentType: 'application/octet-stream; charset=utf-8',
+      success: function(result) {
+        // Handle or verify the server response if necessary.
+        if (result) {
+          $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+         setTimeout(function() {
+          window.location.href = "/catalog";
+         }, 4000);
+          
+      } else {
+        $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+         }
+      }
+      
+  });
+    });
+  }
+</script>
+
+
+
 
 
 		</div>
