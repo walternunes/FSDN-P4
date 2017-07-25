@@ -23,7 +23,35 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+######################
+# JSON API Section
+######################
 
+@app.route('/api/v1/catalog/')
+def showCatalogJSON():
+    categoryItems = session.query(CatalogItem).order_by(CatalogItem.id.desc())
+    return jsonify(Items=[i.serialize for i in categoryItems])
+	
+@app.route('/api/v1/categories/')
+def showCategoryJSON():
+    categories = session.query(Category).all()
+    return jsonify(Categories=[i.serialize for i in categories])
+
+@app.route('/api/v1/catalog/<int:catalog_id>')
+@app.route('/api/v1/catalog/<int:catalog_id>/items')
+def detailCategoryJSON(catalog_id):
+	categoryItems = session.query(CatalogItem).filter_by(category_id = catalog_id).all()
+	return jsonify(Items=[i.serialize for i in categoryItems])
+
+@app.route('/api/v1/catalog/<int:catalog_id>/item/<int:item_id>')
+def detailItemJSON(catalog_id, item_id):
+	catalogItem = session.query(CatalogItem).filter_by(id = item_id).first()
+	return jsonify(Item=catalogItem.serialize)
+
+##################################
+# Catalog Read Operation Section
+##################################	
+	
 # Show all categories
 @app.route('/')
 @app.route('/catalog/')
@@ -56,6 +84,10 @@ def detailItem(catalog_id, item_id):
 	else: canEdit = False
 	return render_template('detail_item.html', catalog_id=catalog_id, catalogItem = catalogItem, creator=creator, canEdit=canEdit)
 
+	
+##################################
+# Catalog Update Operations Section
+##################################
 @app.route(
     '/catalog/<int:catalog_id>/item/<int:item_id>/edit',
     methods=['GET', 'POST'])
@@ -77,6 +109,9 @@ def editItem(catalog_id, item_id):
         return render_template(
             'edit_item.html', catalog_id=catalog_id, item_id=item_id, item=editedItem)
 
+##################################
+# Catalog Create Operation Section
+##################################
 @app.route(
     '/catalog/item/create',
     methods=['GET', 'POST'])
@@ -100,7 +135,9 @@ def createItem():
 	else:
 		return render_template('create_item.html', categories=categories)
 
-
+##################################
+# Catalog Delete Operation Section
+##################################
 @app.route('/catalog/<int:catalog_id>/item/<int:item_id>/delete',
            methods=['GET', 'POST'])
 def deleteItem(catalog_id, item_id):
@@ -116,7 +153,12 @@ def deleteItem(catalog_id, item_id):
 	else:
 		return render_template('delete_item.html', item=itemToDelete)
     # return "This page is for deleting menu item %s" % menu_id
+
 	
+##################################
+# Login Handling Section
+##################################
+
 # Create anti-forgery state token
 @app.route('/login')
 def showLogin():
@@ -236,7 +278,10 @@ def getUserID(email):
         return user.id
     except:
         return None
-	
+
+##################################
+# Disconnect Handling Section
+##################################		
 @app.route('/gdisconnect')
 def gdisconnect():
     access_token = login_session.get('credentials')
