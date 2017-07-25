@@ -1,17 +1,10 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <a href="{{url_for('showCategory')}}" class="navbar-brand">Item Catalog</a>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
+	
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-		{% if 'username' in session %}
-			<ul class="nav navbar-nav">
-				<li><a >MyCatalog</a></li>
-			</ul>
-		{% endif %}
 		<ul class="nav navbar-nav navbar-right">
 			{% if 'username' in session %}
 				<li><a href="{{url_for('disconnect')}}">{{session.username}} - Logout</a></li>
@@ -19,6 +12,6 @@
 				<li><a href="{{url_for('showLogin')}}">Login</a></li>
 			{% endif%}
 		</ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>

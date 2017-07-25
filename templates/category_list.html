@@ -1,11 +1,11 @@
 <div class="col-md-5">
 	<div class="row"> 
 	  <div class="col-xs-12">
-		<div style="display: inline-block;">
-			<h4 style="font-weight: bold;">Category Name:<h4>
+		<div class="category-box">
+			<h4 class="category-label">Category Name:<h4>
 		</div>
 		{% if 'username' in session %}
-			<div style="display: inline-block" class="pull-right"" >
+			<div class="pull-right category-box" >
 				<a href="{{url_for('createItem')}}" class="btn btn-success pull-right">New Item</a>
 			</div>
 		{% endif %}

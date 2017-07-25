@@ -4,35 +4,34 @@
 	<meta charset="utf-8">
 	<title>Item Catalog</title>
 	<base href="/">
-
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 </head>
 <body>
-{% include "header.html" %}
-<form method = 'post'>
-<div class="container">
-	<div class="row">				
-		<div class="row">
-			<div class="col-xs-12">
-				<form method = "post">
-				<div class="row">
-					<div class="col-xs-12">
-						<div class="form-group">
-							<h1> Are you sure you want to delete {{item.name}}? </h1>
+	{% include "header.html" %}
+	<form method = 'post'>
+	<div class="container">
+		<div class="row">				
+			<div class="row">
+				<div class="col-xs-12">
+					<form method = "post">
+					<div class="row">
+						<div class="col-xs-12">
+							<div class="form-group">
+								<h1> Are you sure you want to delete {{item.name}}? </h1>
+							</div>
 						</div>
 					</div>
-				</div>
-				<hr>
-				<div class="row">
-					<div class="col-xs-12">
-						<button type="submit" class="btn btn-danger" id="submit" type="submit">Delete</button>
-							<a href="{{url_for('showCategory')}}" class="btn btn-primary">Cancel</a>
+					<hr>
+					<div class="row">
+						<div class="col-xs-12">
+							<button type="submit" class="btn btn-danger" id="submit" type="submit">Delete</button>
+								<a href="{{url_for('showCategory')}}" class="btn btn-primary">Cancel</a>
+						</div>
 					</div>
+					</form>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
-</form>
 </body>
 </html>

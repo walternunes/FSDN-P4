@@ -1,0 +1,49 @@
+/*
+ *	Login
+ */
+ 
+ .login-gbox {
+	 width: 100%;  
+	 text-align: center
+ }
+ 
+ .login-title {
+	 text-align: center
+ }
+ 
+ /*
+ *	Detail Item
+ */
+ 
+ .detail-img {
+	 max-height: 250px;
+	 max-width: 250px; 
+	 margin: 5px 15px 5px 5px
+ }
+ 
+ .item-box {
+	 margin-left: 20px
+ }
+ 
+ .description-box {
+	 display: inline-block;
+	 overflow: hidden; 
+	 white-space: pre-wrap
+ }
+ 
+ .detail-footer {
+	 width: 100%;  
+	 text-align: center
+ }
+ 
+ /*
+ *	Main
+ */
+ 
+ .category-box {
+	 display: inline-block;
+ }
+ 
+ .category-label {
+	 font-weight: bold;
+ }
