@@ -9,12 +9,23 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 	
+
 	<!--GOOGLE SIGN IN -->
 	<script>
 		function signInCallback(authResult) {
 		  if (authResult['code']) {
 			// Hide the sign-in button now that the user is authorized
 			$('#signinButton').attr('style', 'display: none');
+			
+			// CSRF token protection
+			var csrf_token = "{{ csrf_token() }}";
+			$.ajaxSetup({
+				beforeSend: function(xhr, settings) {
+					if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+						xhr.setRequestHeader("X-CSRFToken", csrf_token);
+					}
+				}
+			});
 			$.ajax({
 			  type: 'POST',
 			  url: '/gconnect?state={{STATE}}',
@@ -65,6 +76,15 @@
 			console.log('Welcome!  Fetching your information.... ');
 			FB.api('/me', function(response) {
 			  console.log('Successful login for: ' + response.name);
+			  // CSRF token protection
+			  var csrf_token = "{{ csrf_token() }}";
+				 $.ajaxSetup({
+					beforeSend: function(xhr, settings) {
+						if (!/^(GET|HEAD|OPTIONS|TRACE)$/i.test(settings.type) && !this.crossDomain) {
+							xhr.setRequestHeader("X-CSRFToken", csrf_token);
+						}
+					}
+				 });
 				 $.ajax({
 				  type: 'POST',
 				  url: '/fbconnect?state={{STATE}}',

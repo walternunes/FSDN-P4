@@ -32,8 +32,70 @@ category1 = Category(name="Snowboarding")
 session.add(category1)
 session.commit()
 
+
+category2 = Category(name="Hockey")
+
+session.add(category2)
+session.commit()
+
+
+category3 = Category(name="Soccer")
+
+session.add(category3)
+session.commit()
+
+
+category4 = Category(name="Tennis")
+
+session.add(category4)
+session.commit()
+
+
+category5 = Category(name="Golf")
+
+session.add(category5)
+session.commit()
+
+
+category6 = Category(name="Basketball")
+
+session.add(category6)
+session.commit()
+
+
+category7 = Category(name="Volleyball")
+
+session.add(category7)
+session.commit()
+
+
+category8 = Category(name="Skiing")
+
+session.add(category8)
+session.commit()
+
+
+category9 = Category(name="Judo")
+
+session.add(category9)
+session.commit()
+
+
+category10 = Category(name="Surf")
+
+session.add(category10)
+session.commit()
+
+
 # Items
 catalogItem1 = CatalogItem(name="Snowboard", description="Snowboard description",
+                     image_url="", category=category1, user_id=1)
+
+session.add(catalogItem1)
+session.commit()
+
+
+catalogItem1 = CatalogItem(name="Snowboard boots", description="snowboard boots ",
                      image_url="", category=category1, user_id=1)
 
 session.add(catalogItem1)
@@ -44,13 +106,6 @@ catalogItem2 = CatalogItem(name="Goggles", description="A pair of goggles",
                      image_url="", category=category1, user_id=1)
 
 session.add(catalogItem2)
-session.commit()
-
-
-
-category2 = Category(name="Hockey")
-
-session.add(category2)
 session.commit()
 
 
