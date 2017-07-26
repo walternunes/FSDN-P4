@@ -6,7 +6,7 @@ from flask import session as login_session
 import random
 import string
 import requests
-
+from flask_wtf.csrf import CSRFProtect
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 import httplib2
@@ -22,6 +22,8 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+CSRFProtect(app)
+
 
 ######################
 # JSON API Section
@@ -278,6 +280,11 @@ def getUserID(email):
         return user.id
     except:
         return None
+	
+def validate_login():
+	if 'username' not in login_session:
+		return True
+	else: return False
 
 ##################################
 # Disconnect Handling Section
@@ -406,12 +413,6 @@ def disconnect():
     else:
         flash("You were not logged in")
         return redirect(url_for('showCategory'))
-
-	
-def validate_login():
-	if 'username' not in login_session:
-		return True
-	else: return False
 	
 if __name__ == '__main__':
 	app.secret_key = 'super_secret_key'
