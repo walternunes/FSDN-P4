@@ -33,15 +33,15 @@ CSRFProtect(app)
 @app.route('/api/v1/catalog/')
 def showCatalogJSON():
     """ API that returns JSON with all catalog items registered """
-    categoryItems = session.query(CatalogItem).order_by(CatalogItem.id.desc())
-    return jsonify(Items=[i.serialize for i in categoryItems])
+    allItems = session.query(CatalogItem).order_by(CatalogItem.id.asc())
+    return jsonify(Items=[item.serialize for item in allItems])
 
 
 @app.route('/api/v1/categories/')
 def showCategoryJSON():
     """ API that returns JSON with all categories registered """
     categories = session.query(Category).all()
-    return jsonify(Categories=[i.serialize for i in categories])
+    return jsonify(Categories=[item.serialize for item in categories])
 
 
 @app.route('/api/v1/catalog/<int:catalog_id>')
@@ -49,15 +49,15 @@ def showCategoryJSON():
 def detailCategoryJSON(catalog_id):
     """ API that returns JSON with all catalog item of the given category """
     categoryItems = session.query(CatalogItem).filter_by(
-        category_id=catalog_id).all()
-    return jsonify(Items=[i.serialize for i in categoryItems])
+        category_id=catalog_id).order_by(CatalogItem.id.asc()).all()
+    return jsonify(Items=[item.serialize for item in categoryItems])
 
 
 @app.route('/api/v1/catalog/<int:catalog_id>/item/<int:item_id>')
 def detailItemJSON(catalog_id, item_id):
     """ API that returns JSON with the item detail of the given item id """
-    catalogItem = session.query(CatalogItem).filter_by(id=item_id).first()
-    return jsonify(Item=catalogItem.serialize)
+    item = session.query(CatalogItem).filter_by(id=item_id).first()
+    return jsonify(Item=item.serialize)
 
 
 ##################################

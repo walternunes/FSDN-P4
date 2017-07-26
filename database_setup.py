@@ -48,7 +48,8 @@ class CatalogItem(Base):
 			'name': self.name,
 			'id': self.id,
 			'description': self.description,
-			'image_url': self.image_url
+			'image_url': self.image_url,
+			'category_name': self.category.name
 		}
 
 

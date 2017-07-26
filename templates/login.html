@@ -75,6 +75,7 @@
 			console.log(access_token)
 			console.log('Welcome!  Fetching your information.... ');
 			FB.api('/me', function(response) {
+			  $('#signinButton').attr('style', 'display: none');
 			  console.log('Successful login for: ' + response.name);
 			  // CSRF token protection
 			  var csrf_token = "{{ csrf_token() }}";
@@ -117,7 +118,7 @@
 			<h2 class="form-signin-heading login-title">Please sign in using</h2>
 
 			<hr>
-			<div id="signInButton" class="login-gbox">
+			<div id="signinButton" class="login-gbox">
 				<div>
 					<span data-scope="openid email"
 						data-clientid="335616115800-mim4qj5dad05nbau20im64pelssq0cdp.apps.googleusercontent.com"
