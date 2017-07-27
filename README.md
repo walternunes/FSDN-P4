@@ -22,7 +22,7 @@ An API to get items information should be implemented
 * Wait to download all dependencies and setup.
 
 2-) Clone project and download Python dependencies
-* Clone my [Item Catalog] project in ```/vagrant/catalog``` folder
+* Clone my "Item Catalog" project ```https://github.com/walternunes/FSDN-P4.git``` project in ```/vagrant/catalog``` folder
 * Inside ```vagrant``` folder run ```vagrant ssh``` to access the machine (if you are not logged in yet)
 * Download the python dependencies: ```pip install requests``` and ```pip install flask_wtf```
 
