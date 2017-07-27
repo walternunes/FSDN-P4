@@ -1,4 +1,5 @@
-from flask import Flask, render_template, request, redirect, jsonify, url_for, make_response  # noqa
+from flask import Flask, render_template, request, redirect, jsonify, url_for
+from flask import make_response
 from flask import session as login_session
 from flask_wtf.csrf import CSRFProtect, CSRFError
 from sqlalchemy import create_engine
@@ -6,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Category, CatalogItem, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from functools import wraps
 import random
 import string
 import requests
@@ -26,6 +28,18 @@ session = DBSession()
 
 # Enable CSRF Protection
 CSRFProtect(app)
+
+
+# Login required decorator
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if 'username' not in login_session:
+            return redirect(url_for('showLogin'))
+        else:
+            return func(*args, **kwargs)
+    return wrapper
+
 
 ######################
 # JSON API Section
@@ -88,6 +102,10 @@ def detailCategory(catalog_id):
         of the requested category """
     categories = session.query(Category).all()
     category = session.query(Category).filter_by(id=catalog_id).first()
+
+    # Case no results returned due invalid id, redirect to main screen
+    if category is None:
+        return redirect(url_for('showCategory'))
     categoryName = category.name
     categoryId = category.id
     categoryItems = session.query(CatalogItem).filter_by(
@@ -101,6 +119,10 @@ def detailCategory(catalog_id):
 def detailItem(catalog_id, item_id):
     """ Returns the page with the details of the requested item"""
     catalogItem = session.query(CatalogItem).filter_by(id=item_id).first()
+
+    # Case no results returned due invalid id, redirect to main screen
+    if catalogItem is None:
+        return redirect(url_for('showCategory'))
     creator = getUserInfo(catalogItem.user_id)
 
     # Flag that identifies if Edit/Delete button will appear for logged users
@@ -121,14 +143,15 @@ def detailItem(catalog_id, item_id):
 @app.route(
     '/catalog/<int:catalog_id>/item/<int:item_id>/edit',
     methods=['GET', 'POST'])
+@login_required
 def editItem(catalog_id, item_id):
     """ Edit page - Responsible for update the requested item"""
 
-    # Only logged users can edit items
-    if validate_login():
-        return redirect(url_for('showLogin'))
-    editedItem = session.query(CatalogItem).filter_by(id=item_id).one()
+    editedItem = session.query(CatalogItem).filter_by(id=item_id).first()
 
+    # Case no results returned due invalid id, redirect to main screen
+    if editedItem is None:
+        return redirect(url_for('showCategory'))
     # Only the owner of the item can edit the item
     if editedItem.user_id != login_session.get('user_id'):
         return "<script>function myFunction() {alert('You are not authorized to edit this item. Please create your own item in order to edit.');}</script><body onload='myFunction()''>"  # noqa
@@ -157,12 +180,9 @@ def editItem(catalog_id, item_id):
 @app.route(
     '/catalog/item/create',
     methods=['GET', 'POST'])
+@login_required
 def createItem():
     """Create page - Responsible for create a new item of selected category"""
-
-    # Only logged users can create items
-    if validate_login():
-        return redirect(url_for('showLogin'))
 
     categories = session.query(Category).all()
     if request.method == 'POST':
@@ -187,14 +207,15 @@ def createItem():
 
 @app.route('/catalog/<int:catalog_id>/item/<int:item_id>/delete',
            methods=['GET', 'POST'])
+@login_required
 def deleteItem(catalog_id, item_id):
     """ Delete page - Responsible for delete the requested item """
 
-    # Only logged users can delete items
-    if validate_login():
-        return redirect(url_for('showLogin'))
-    itemToDelete = session.query(CatalogItem).filter_by(id=item_id).one()
+    itemToDelete = session.query(CatalogItem).filter_by(id=item_id).first()
 
+    # Case no results returned due invalid id, redirect to main screen
+    if itemToDelete is None:
+        return redirect(url_for('showCategory'))
     # Only the owner of the item can delete the item
     if itemToDelete.user_id != login_session.get('user_id'):
         return "<script>function myFunction() {alert('You are not authorized to delete this item. Please create your own item in order to delete.');}</script><body onload='myFunction()''>"  # noqa
@@ -310,7 +331,6 @@ def gconnect():
     output += '<img src="'
     output += login_session['picture']
     output += ' " style = "width: 300px; height: 300px;border-radius: 150px;-webkit-border-radius: 150px;-moz-border-radius: 150px;"> '  # noqa
-    print "done!"
     return output
 
 
@@ -383,20 +403,20 @@ def createUser(login_session):
                    'email'], picture=login_session['picture'])
     session.add(newUser)
     session.commit()
-    user = session.query(User).filter_by(email=login_session['email']).one()
+    user = session.query(User).filter_by(email=login_session['email']).first()
     return user.id
 
 
 def getUserInfo(user_id):
     """ Method responsible for retrieve logged user details """
-    user = session.query(User).filter_by(id=user_id).one()
+    user = session.query(User).filter_by(id=user_id).first()
     return user
 
 
 def getUserID(email):
     """ Method responsible for retrieve logged user id """
     try:
-        user = session.query(User).filter_by(email=email).one()
+        user = session.query(User).filter_by(email=email).first()
         return user.id
     except:
         return None
@@ -461,14 +481,6 @@ def disconnect():
         return redirect(url_for('showCategory'))
     else:
         return redirect(url_for('showCategory'))
-
-
-def validate_login():
-    """ Method responsible for validate if the user is logged """
-    if 'username' not in login_session:
-        return True
-    else:
-        return False
 
 
 @app.errorhandler(CSRFError)
