@@ -23,6 +23,8 @@ Base.metadata.bind = engine
 
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
+
+# Enable CSRF Protection
 CSRFProtect(app)
 
 ######################
