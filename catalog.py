@@ -17,8 +17,8 @@ import json
 
 app = Flask(__name__)
 
-CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+with app.open_resource('client_secrets.json') as jsonFile:
+    CLIENT_ID = json.load(jsonFile)['web']['client_id']
 
 engine = create_engine('sqlite:///itemcatalog.db')
 Base.metadata.bind = engine
